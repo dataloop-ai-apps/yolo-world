@@ -1,0 +1,149 @@
+{
+    "name": "yolo-world",
+    "displayName": "YOLO-World",
+    "version": "0.0.1",
+    "scope": "public",
+    "description": "YOLO-World builds on YOLOv8's speed and provides zero-shot detection of unknown objects.",
+    "attributes": {
+      "Provider": "Ultralytics",
+      "License": "GPL 3.0",
+      "Category": "Model",
+      "Computer Vision": "Object Detection",
+      "Media Type": ["Image"],
+      "Deployed By": "Dataloop"
+    },
+    "codebase": {
+      "type": "git",
+      "gitUrl": "https://github.com/dataloop-ai-apps/yolo-world.git",
+      "gitTag": "0.0.1"
+    },
+    "components": {
+      "computeConfigs": [
+        {
+          "name": "yolo-world-deploy",
+          "runtime": {
+            "podType": "regular-xs",
+            "concurrency": 1,
+            "runnerImage": "ultralytics/ultralytics:8.2.26-python",
+            "autoscaler": {
+              "type": "rabbitmq",
+              "minReplicas": 0,
+              "maxReplicas": 2,
+              "queueLength": 100
+            }
+          }
+        }
+      ],
+      "modules": [
+        {
+          "name": "yolo-world-module",
+          "entryPoint": "model_adapter.py",
+          "className": "Adapter",
+          "computeConfig": "yolo-world-deploy",
+          "description": "Yolo-World Module",
+          "initInputs": [
+            {
+              "type": "Model",
+              "name": "model_entity"
+            }
+          ],
+          "functions": [
+            {
+              "name": "predict_items",
+              "input": [
+                {
+                  "type": "Item[]",
+                  "name": "items",
+                  "description": "List of items to run inference on"
+                }
+              ],
+              "output": [
+                {
+                  "type": "Item[]",
+                  "name": "items",
+                  "description": "The same input images for prediction."
+                },
+                {
+                  "type": "Annotation[]",
+                  "name": "annotations",
+                  "description": "The predicted annotations."
+                }
+              ],
+              "displayName": "Predict Items",
+              "displayIcon": "",
+              "description": "Function to run YOLOv9 inference on items"
+            },
+            {
+              "name": "predict_dataset",
+              "input": [
+                {
+                  "type": "Dataset",
+                  "name": "dataset",
+                  "description": ""
+                },
+                {
+                  "type": "Json",
+                  "name": "filters",
+                  "description": "Dataloop Filter DQL"
+                }
+              ],
+              "output": [],
+              "displayName": "Predict Dataset",
+              "displayIcon": "",
+              "description": "Function to run YOLOv9 inference on a dataset."
+            }
+          ]
+        }
+      ],
+      "models": [
+        {
+          "name": "yolov8s-world",
+          "moduleName": "yolo-world-module",
+          "scope": "project",
+          "status": "pre-trained",
+          "configuration": {
+            "weights_filename": "yolov8s-worldv2.pt"
+          },
+          "inputType": "image",
+          "outputType": "box",
+          "description": "YOLOv8s model"
+        },
+        {
+            "name": "yolov8m-world",
+            "moduleName": "yolo-world-module",
+            "scope": "project",
+            "status": "pre-trained",
+            "configuration": {
+              "weights_filename": "yolov8m-worldv2.pt"
+            },
+            "inputType": "image",
+            "outputType": "box",
+            "description": "YOLOv8m model"
+        },
+        {
+            "name": "yolov8l-world",
+            "moduleName": "yolo-world-module",
+            "scope": "project",
+            "status": "pre-trained",
+            "configuration": {
+              "weights_filename": "yolov8l-worldv2.pt"
+            },
+            "inputType": "image",
+            "outputType": "box",
+            "description": "YOLOv8l model"
+        },
+        {
+            "name": "yolov8x-world",
+            "moduleName": "yolo-world-module",
+            "scope": "project",
+            "status": "pre-trained",
+            "configuration": {
+              "weights_filename": "yolov8x-worldv2.pt"
+            },
+            "inputType": "image",
+            "outputType": "box",
+            "description": "YOLOv8x model"
+        }
+      ]
+    }
+  }

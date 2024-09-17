@@ -16,7 +16,9 @@ PIL.Image.MAX_IMAGE_PIXELS = 933120000
                               name='model-adapter',
                               init_inputs={'model_entity': dl.Model})
 class Adapter(dl.BaseModelAdapter):
-
+    """
+    Model Adapter class for loading and using the YOLOWorld model.
+    """
     def load(self, local_path, **kwargs):
         model_filename = self.configuration.get('weights_filename', 'yolov8s-worldv2.pt')
         model_filepath = os.path.join(local_path, model_filename)
@@ -34,7 +36,7 @@ class Adapter(dl.BaseModelAdapter):
             self.model.set_classes(custom_labels)
         else:
             logger.warning('No custom labels provided, using default labels')
-            pass # do not set classes
+            pass # do not set classes/custom labels
         
     def prepare_item_func(self, item):
         filename = item.download(overwrite=True)

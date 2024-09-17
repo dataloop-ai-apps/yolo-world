@@ -123,7 +123,11 @@
           "scope": "project",
           "status": "pre-trained",
           "configuration": {
-            "weights_filename": "yolov8s-worldv2.pt"
+            "weights_filename": "yolov8s-worldv2.pt",
+            "labels": [
+              "animate",
+              "inanimate"
+            ]
           },
           "inputType": "image",
           "outputType": "box",

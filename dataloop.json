@@ -49,6 +49,27 @@
           ],
           "functions": [
             {
+              "name": "evaluate_model",
+              "computeConfig": "yolo-world-train-evaluate",
+              "input": [
+                {
+                  "type": "Model",
+                  "name": "model",
+                  "description": "Dataloop Model Entity"
+                },
+                {
+                  "type": "Dataset",
+                  "name": "dataset",
+                  "description": "Dataloop Dataset Entity"
+                },
+                {
+                  "type": "Json",
+                  "name": "filters",
+                  "description": "Filter to select items over which to run evaluation"
+                }
+              ]
+            },
+            {
               "name": "predict_items",
               "input": [
                 {

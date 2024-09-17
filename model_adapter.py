@@ -28,7 +28,14 @@ class Adapter(dl.BaseModelAdapter):
             url = 'https://github.com/ultralytics/assets/releases/download/v8.2.0/' + model_filename
             model = YOLOWorld(url)  # pass any model type
         self.model = model
-
+        
+        custom_labels = self.configuration.get('labels', None)
+        if custom_labels:
+            self.model.set_classes(custom_labels)
+        else:
+            logger.warning('No custom labels provided, using default labels')
+            pass # do not set classes
+        
     def prepare_item_func(self, item):
         filename = item.download(overwrite=True)
         image = Image.open(filename)

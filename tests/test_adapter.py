@@ -70,9 +70,9 @@ def test_prepare_item_func(adapter, mock_item):
     """Test the adapter's item preparation function."""
     image = adapter.prepare_item_func(item=mock_item)
     expected = load_expected_output(
-        f"test_prepare_item_func_{mock_item.file_name_no_ext}.pkl"
+        "test_prepare_item_func_{}.pkl".format(mock_item.file_name_no_ext)
     )
-    assert image == expected, f"Prepared image for {mock_item.file_name} does not match expected output."
+    assert image == expected, "Prepared image for {} does not match expected output.".format(mock_item.file_name)
 
 
 @pytest.mark.parametrize("mock_item", ["test_1.jpg"], indirect=True)
@@ -81,5 +81,5 @@ def test_predict(adapter, mock_item):
     adapter.load(local_path=".")
     image = adapter.prepare_item_func(item=mock_item)
     results = adapter.predict([image])
-    expected = load_expected_output(f"test_predict_{mock_item.file_name_no_ext}.pkl")
-    assert results == expected, f"Prediction results for {mock_item.file_name} do not match expected output."
+    expected = load_expected_output("test_predict_{}.pkl".format(mock_item.file_name_no_ext))
+    assert results == expected, "Prediction results for {} do not match expected output.".format(mock_item.file_name)

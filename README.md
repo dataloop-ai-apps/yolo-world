@@ -36,4 +36,4 @@ The basic configurations included are:
 
 ## Acknowledgements
 
-The original YOLOv9 paper can be found on [arXiv](https://arxiv.org/abs/2401.17270). The authors have made their work publicly available, and the codebase can be accessed on [GitHub](https://github.com/AILab-CVC/YOLO-World). We appreciate their efforts in advancing the field and making their work accessible to the broader community.
+The original YOLO-World paper can be found on [arXiv](https://arxiv.org/abs/2401.17270). The authors have made their work publicly available, and the codebase can be accessed on [GitHub](https://github.com/AILab-CVC/YOLO-World). We appreciate their efforts in advancing the field and making their work accessible to the broader community.

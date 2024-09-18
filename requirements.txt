@@ -2,3 +2,4 @@ torch==2.4.1
 ultralytics==8.2.91
 dtlpy==1.94.5
 PyYAML==6.0.2
+pytest

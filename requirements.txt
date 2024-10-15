@@ -1,0 +1,5 @@
+torch==2.4.1
+ultralytics==8.2.91
+dtlpy
+PyYAML==6.0.2
+pytest

@@ -66,7 +66,8 @@ class TestAdapter(unittest.TestCase):
         for file_name in file_names:
             with self.subTest(file_name=file_name):
                 mock_item = MockItem(file_name=file_name)
-                image, _ = self.adapter.prepare_item_func(item=mock_item)
+                batch = self.adapter.prepare_item_func(item=mock_item)
+                image, _ = batch
                 expected = self.load_expected_output(
                     f"test_prepare_item_func_{mock_item.file_name_no_ext}.pkl"
                 )
@@ -83,8 +84,8 @@ class TestAdapter(unittest.TestCase):
         for file_name in file_names:
             with self.subTest(file_name=file_name):
                 mock_item = MockItem(file_name=file_name)
-                image, _ = self.adapter.prepare_item_func(item=mock_item)
-                results = self.adapter.predict([image])
+                batch = self.adapter.prepare_item_func(item=mock_item)
+                results = self.adapter.predict([batch])
                 expected = self.load_expected_output(
                     f"test_predict_{mock_item.file_name_no_ext}.pkl"
                 )

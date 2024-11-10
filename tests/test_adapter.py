@@ -21,6 +21,7 @@ class MockItem:
         self.file_name = file_name
         self.file_name_no_ext = Path(file_name).stem
         self.file_path = TEST_DATA_DIR / file_name
+        self.mimetype = "image"
 
     def download(self, overwrite=True):
         """Mock download method returning the local file path."""

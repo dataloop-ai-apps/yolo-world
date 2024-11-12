@@ -32,6 +32,7 @@ class Adapter(dl.BaseModelAdapter):
             url = 'https://github.com/ultralytics/assets/releases/download/v8.2.0/' + model_filename
             model = YOLOWorld(url)  # pass any model type
         model.to(device=device)
+        logger.info(f"Model loaded successfully, Device: {model.device}")
         self.model = model
         
         custom_labels = self.configuration.get('labels', None)

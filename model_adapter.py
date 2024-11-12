@@ -22,6 +22,7 @@ class Adapter(dl.BaseModelAdapter):
     """
     def load(self, local_path, **kwargs):
         model_filename = self.configuration.get('weights_filename', 'yolov8s-worldv2.pt')
+        device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
         model_filepath = os.path.join(local_path, model_filename)
 
         if os.path.isfile(model_filepath):
@@ -30,6 +31,7 @@ class Adapter(dl.BaseModelAdapter):
             logger.warning(f'Model path ({model_filepath}) not found! loading default model weights')
             url = 'https://github.com/ultralytics/assets/releases/download/v8.2.0/' + model_filename
             model = YOLOWorld(url)  # pass any model type
+        model.to(device=device)
         self.model = model
         
         custom_labels = self.configuration.get('labels', None)
@@ -70,11 +72,7 @@ class Adapter(dl.BaseModelAdapter):
             else:
                 logger.warning(f'Item {item.id} mimetype is not supported. Skipping item prediction')
 
-        device = self.configuration.get('device', None)
-        if device is None:
-            device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
-
-        results = self.model.predict(source=filtered_streams, save=False, save_txt=False, device=device)  # save predictions as labels
+        results = self.model.predict(source=filtered_streams, save=False, save_txt=False)  # save predictions as labels
         batch_annotations = list()
         for _, res in enumerate(results):  # per image
             image_annotations = dl.AnnotationCollection()

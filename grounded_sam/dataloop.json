@@ -37,7 +37,7 @@
       "modules": [
         {
           "name": "grounded-yolo-world-sam2-module",
-          "entryPoint": "grounded_adapter.py",
+          "entryPoint": "grounded_sam/grounded_adapter.py",
           "className": "GroundedSAMAdapter",
           "computeConfig": "grounded-yolo-world-sam2-deploy",
           "description": "Grounded YoloWorld SAM2 Module",

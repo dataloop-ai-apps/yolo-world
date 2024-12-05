@@ -4,15 +4,14 @@ import logging
 import base64
 import cv2
 import numpy as np
-import os
 
 logger = logging.getLogger('Grounded-YoloWorld-Sam2-Adapter')
 SAM_SERVICE_NAME = "global-sam"
 
 
 class GroundedSAMAdapter(dl.BaseModelAdapter):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, model_entity: dl.Model):
+        super().__init__(model_entity)
         self.yolo_adapter = None
         self.sam2_service = None
 

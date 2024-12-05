@@ -96,10 +96,13 @@
           "moduleName": "grounded-yolo-world-sam2-module",
           "scope": "project",
           "status": "pre-trained",
-          "configuration": {},
           "inputType": "image",
           "outputType": "segment",
-          "description": "Grounded YoloWorld SAM2 Model"
+          "description": "Grounded YoloWorld SAM2 Model",
+          "configuration": {
+            "weights_filename": "yolov8s-worldv2.pt",
+            "labels": []
+          }
         }
       ]
     }

@@ -4,8 +4,10 @@ import logging
 import base64
 import cv2
 import numpy as np
+import os
 
 logger = logging.getLogger('Grounded-YoloWorld-Sam2-Adapter')
+SAM_SERVICE_NAME = "global-sam"
 
 
 class GroundedSAMAdapter(dl.BaseModelAdapter):
@@ -16,52 +18,47 @@ class GroundedSAMAdapter(dl.BaseModelAdapter):
 
     def load(self, local_path, **kwargs):
         """
-        Load the wrapped YOLOWorld adapter and optionally extend its behavior.
+        Load the wrapped YOLOWorld adapter and the SAM2 service.
         """
-
-        # Initialize YOLOWorldAdapter with the same model_entity
+        # Initialize YOLOWorldAdapter
         self.yolo_adapter = YOLOWorldAdapter(model_entity=self.model_entity)
-        # Load the YOLOWorldAdapter with the provided local path
-        self.yolo_adapter.load(local_path, **kwargs)
         logger.info("YOLOWorld Adapter successfully loaded")
 
         # Connect to SAM2 Service
-        sam_service_name = "global-sam"
-        self.sam2_service = dl.services.get(service_name=sam_service_name)
+        self.sam2_service = dl.services.get(service_name=SAM_SERVICE_NAME)
         if not self.sam2_service:
-            raise ValueError(f"SAM Service '{sam_service_name}' not found")
+            raise ValueError(f"SAM Service '{SAM_SERVICE_NAME}' not found")
         logger.info(f"Connected to SAM Service: {self.sam2_service.name}")
+
+    def prepare_item_func(self, item):
+        return item
 
     def predict(self, batch, **kwargs):
         """
         Perform predictions using YOLOWorld and pass bounding boxes to SAM2.
         """
         logger.info("Running YOLOWorld predictions")
-        yolo_predictions = self.yolo_adapter.predict(batch, **kwargs)
+        self.yolo_adapter.model.set_classes([label.tag for label in batch[0].dataset.labels])
+        images = [self.yolo_adapter.prepare_item_func(item) for item in batch]
+        yolo_predictions = self.yolo_adapter.predict(images, **kwargs)
 
         batch_annotations = list()
         for item, annotations in zip(batch, yolo_predictions):
-            # Convert YOLOWorld bounding boxes to SAM format
-            bounding_boxes = []
             image_annotations = dl.AnnotationCollection()
+            bounding_boxes = []
             for annotation in annotations:
-                box = {
-                    'coordinates': [
-                        {'x': annotation.left, 'y': annotation.top},
-                        {'x': annotation.right, 'y': annotation.bottom}
-                    ],
-                    'label': annotation.label,
-                    'attributes': annotation.attributes
-                }
-                bounding_boxes.append(box)
+                bounding_boxes.append(annotation.to_json())
 
             # Invoke SAM2 Service for segmentation
             logger.info(f"Invoking SAM2 Service for item {item.id}")
-            sam2_execution = self.sam2_service.execute(
-                execution_input={'item_id': item.id,
-                                 'annotations': bounding_boxes}
-            )
+            sam2_execution = self.sam2_service.execute(function_name='box_to_segmentation',
+                                                       execution_input={'item': item.id,
+                                                                        'annotations': bounding_boxes},
+                                                       project_id=item.project_id)
             sam2_execution = sam2_execution.wait()
+            if sam2_execution.status[-1]['status'] != "success":
+                logger.error(f"SAM2 Service failed with error: {sam2_execution.status[-1]['message']}")
+                continue
             sam2_output = sam2_execution.output
             logger.info(f"SAM2 Service returned predictions for item {item.id}")
 
@@ -73,7 +70,7 @@ class GroundedSAMAdapter(dl.BaseModelAdapter):
                                   model_info={'name': self.model_entity.name,
                                               'model_id': self.model_entity.id,
                                               'confidence': 1},
-                                  metadata=sam2_output.metadata)
+                                  metadata=sam2_output[0]['metadata'])
 
             batch_annotations.append(image_annotations)
 

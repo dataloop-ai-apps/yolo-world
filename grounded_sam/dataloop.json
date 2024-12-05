@@ -12,6 +12,11 @@
       "Media Type": ["Image"],
       "Deployed By": "Dataloop"
     },
+    "codebase": {
+    "type": "git",
+    "gitUrl": "https://github.com/dataloop-ai-apps/yolo-world.git",
+    "gitTag": "0.0.1"
+    },
     "components": {
       "computeConfigs": [
         {

@@ -21,7 +21,7 @@ class GroundedSAMAdapter(dl.BaseModelAdapter):
         Load the wrapped YOLOWorld adapter and the SAM2 service.
         """
         # Initialize YOLOWorldAdapter
-        self.yolo_adapter = YOLOWorldAdapter(model_entity=self.model_entity)
+        self.yolo_adapter = YOLOWorldAdapter()
         logger.info("YOLOWorld Adapter successfully loaded")
 
         # Connect to SAM2 Service

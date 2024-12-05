@@ -11,9 +11,9 @@ SAM_SERVICE_NAME = "global-sam"
 
 class GroundedSAMAdapter(dl.BaseModelAdapter):
     def __init__(self, model_entity: dl.Model):
-        super().__init__(model_entity)
         self.yolo_adapter = None
         self.sam2_service = None
+        super().__init__(model_entity)
 
     def load(self, local_path, **kwargs):
         """

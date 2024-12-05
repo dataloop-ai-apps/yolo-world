@@ -12,7 +12,6 @@ SAM_SERVICE_NAME = "global-sam"
 class GroundedSAMAdapter(dl.BaseModelAdapter):
     def __init__(self, model_entity: dl.Model):
         super().__init__(model_entity)
-        self.yolo_model = None
         self.yolo_adapter = None
         self.sam2_service = None
 
@@ -22,7 +21,6 @@ class GroundedSAMAdapter(dl.BaseModelAdapter):
         """
         # Initialize YOLOWorldAdapter
         self.yolo_adapter = YOLOWorldAdapter(model_entity=self.model_entity)
-        self.yolo_model = self.yolo_adapter.model
         logger.info("YOLOWorld Adapter successfully loaded")
 
         # Connect to SAM2 Service
@@ -39,9 +37,9 @@ class GroundedSAMAdapter(dl.BaseModelAdapter):
         Perform predictions using YOLOWorld and pass bounding boxes to SAM2.
         """
         logger.info("Running YOLOWorld predictions")
-        self.yolo_model.set_classes([label.tag for label in batch[0].dataset.labels])
+        self.yolo_adapter.model.set_classes([label.tag for label in batch[0].dataset.labels])
         images = [self.yolo_adapter.prepare_item_func(item) for item in batch]
-        yolo_predictions = self.model.predict(images, **kwargs)
+        yolo_predictions = self.yolo_adapter.predict(images, **kwargs)
 
         batch_annotations = list()
         for item, annotations in zip(batch, yolo_predictions):

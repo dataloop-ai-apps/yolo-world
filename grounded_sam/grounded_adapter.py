@@ -37,7 +37,7 @@ class GroundedSAMAdapter(dl.BaseModelAdapter):
         Perform predictions using YOLOWorld and pass bounding boxes to SAM2.
         """
         logger.info("Running YOLOWorld predictions")
-        self.yolo_adapter.model.set_classes([label.tag for label in batch[0].dataset.labels])
+        self.yolo_adapter.model_entity.set_classes([label.tag for label in batch[0].dataset.labels])
         images = [self.yolo_adapter.prepare_item_func(item) for item in batch]
         yolo_predictions = self.yolo_adapter.predict(images, **kwargs)
 

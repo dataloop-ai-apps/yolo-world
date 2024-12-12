@@ -1,4 +1,4 @@
-# YOLO-World Model Adapter
+ YOLO-World Model Adapter
 
 ## Introduction
 

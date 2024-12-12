@@ -52,7 +52,7 @@
       "modules": [
         {
           "name": "yolo-world-module",
-          "entryPoint": "model_adapter.py",
+          "entryPoint": "adapters/yolo_world/model_adapter.py",
           "className": "Adapter",
           "computeConfig": "yolo-world-deploy",
           "description": "Yolo-World Module",

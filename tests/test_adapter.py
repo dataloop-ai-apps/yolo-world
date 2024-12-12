@@ -9,7 +9,7 @@ import dtlpy as dl
 parent_dir = Path(__file__).resolve().parent.parent
 sys.path.append(str(parent_dir))
 
-from model_adapter import Adapter  # noqa: E402 (ignores module level import not at top of file)
+from adapters.yolo_world.model_adapter import Adapter  # noqa: E402 (ignores module level import not at top of file)
 
 TEST_DATA_DIR = Path(__file__).resolve().parent / "data"
 

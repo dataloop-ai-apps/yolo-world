@@ -9,13 +9,14 @@ class YOLOWorldSam2Adapter:
         project = dl.projects.get(project_name="DataloopTasks")
         self.sam2_service = project.service.get(service_name="global-sam")
         self.yolo_adapter = Adapter()
+        self.model_entity = self.yolo_adapter.model_entity.clone(model_name="yolo-world-sam2-model")
 
     @staticmethod
     def get_labels(item):
         return [label.tag for label in item.dataset.labels]
 
     def pred_box_and_seg(self, batch, **kwargs):
-        labels = YOLOWorldSam2Adapter.get_labels(batch[0])
+        labels = YOLOWorldSam2Adapter.get_labels(self.yolo_adapter.model_entity.labels)
         images = [self.yolo_adapter.prepare_item_func(item) for item in batch]
         bboxes = self.yolo_adapter.predict(batch=images, labels=labels)
         builder = dl.AnnotationBuilder()

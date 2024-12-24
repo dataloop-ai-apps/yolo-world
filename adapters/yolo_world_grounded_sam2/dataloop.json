@@ -35,7 +35,7 @@
           "entryPoint": "adapters/yolo_world_grounded_sam2/runner.py",
           "className": "YOLOWorldSam2Adapter",
           "computeConfig": "yolo-world-grounded-sam2-deploy",
-          "description": "Grounded YoloWorld SAM2 Module",
+          "description": "Automatically annotate images with Yolo-World and Grounded SAM2",
           "initInputs": [
           ],
           "functions": [
@@ -84,20 +84,6 @@
               "description": "Function to run grounded YOLO-World SAM2 inference on a dataset."
             }
           ]
-        }
-      ],
-      "models": [
-        {
-          "name": "yolo-world-grounded-sam2",
-          "moduleName": "yolo-world-grounded-sam2-module",
-          "scope": "project",
-          "status": "pre-trained",
-          "inputType": "image",
-          "outputType": "segment",
-          "description": "Automatically annotate images with Yolo-World and Grounded SAM2.",
-          "configuration": {
-            "yolo_weights_filename": "yolov8s-worldv2.pt"
-          }
         }
       ]
     }

@@ -3,3 +3,4 @@ ultralytics==8.2.91
 dtlpy
 PyYAML==6.0.2
 pytest
+pillow

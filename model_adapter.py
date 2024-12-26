@@ -19,6 +19,7 @@ class Adapter(dl.BaseModelAdapter):
     """
     Model Adapter class for loading and using the YOLOWorld model.
     """
+
     def load(self, local_path, **kwargs):
         model_filename = self.configuration.get('weights_filename', 'yolov8s-worldv2.pt')
         model_filepath = os.path.join(local_path, model_filename)
@@ -30,14 +31,10 @@ class Adapter(dl.BaseModelAdapter):
             url = 'https://github.com/ultralytics/assets/releases/download/v8.2.0/' + model_filename
             model = YOLOWorld(url)  # pass any model type
         self.model = model
-        
-        custom_labels = self.configuration.get('labels', None)
-        if custom_labels:
-            self.model.set_classes(custom_labels)
-            logger.info('Using the following custom labels provided in config: {}'.format(custom_labels))
-        else:
-            logger.warning('No custom labels provided, using default model labels')
-            
+        labels = list(self.model_entity.label_to_id_map.keys())
+        logger.info('Using the following custom labels provided in config: {}'.format(labels))
+        self.model.set_classes(labels)
+
     def prepare_item_func(self, item):
         filename = item.download(overwrite=True)
         image = Image.open(filename)

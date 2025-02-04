@@ -1,7 +1,7 @@
 {
     "name": "yolo-world",
     "displayName": "YOLO-World",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "scope": "public",
     "description": "YOLO-World builds on YOLOv8's speed and provides zero-shot detection of unknown objects.",
     "attributes": {
@@ -15,7 +15,7 @@
     "codebase": {
       "type": "git",
       "gitUrl": "https://github.com/dataloop-ai-apps/yolo-world.git",
-      "gitTag": "0.0.1"
+      "gitTag": "0.0.2"
     },
     "components": {
       "computeConfigs": [
